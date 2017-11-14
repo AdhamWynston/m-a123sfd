@@ -14,8 +14,11 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
-$router->group(['prefix' => 'v1', 'middleware'=>'auth:api', 'cors'], function () use ($router) {
+$router->group(['prefix' => 'v1', 'middleware'=>'cors'], function () use ($router) {
     $router->get('users', [
         'as' => 'users', 'uses' => 'UserController@index'
+    ]);
+    $router->get('users/{id}', [
+        'as' => 'users.view', 'uses' => 'UserController@show'
     ]);
 });
