@@ -22,12 +22,16 @@ import router from './router'
 import Vuex from 'vuex'
 import VuexStore from './vuex/store'
 import VueResource from 'vue-resource'
+import Auth from './packages/auth/Auth'
 
 Vue.config.productionTip = false
 Vue.use(Quasar) // Install Quasar Framework
 Vue.use(Vuex)
 Vue.use(VueResource)
 Vue.use(VuexStore)
+Vue.use(Auth)
+Vue.http.options.root = process.env.SERVER
+Vue.http.options.emulateJSON = true
 
 const store = new Vuex.Store(VuexStore)
 
@@ -35,6 +39,29 @@ if (__THEME === 'mat') {
   require('quasar-extras/roboto-font')
 }
 
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.forAny)) {
+    if (Vue.auth.isAuthenticated()) {
+      next({
+        path: '/home'
+      })
+    }
+    next()
+  }
+  else if (to.matched.some(record => record.meta.forAuth)) {
+    if (!Vue.auth.isAuthenticated()) {
+      next({
+        path: '/'
+      })
+    }
+    else {
+      next()
+    }
+  }
+  else {
+    next()
+  }
+})
 Quasar.start(() => {
   /* eslint-disable no-new */
   new Vue({

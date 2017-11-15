@@ -36,6 +36,7 @@
 </template>
 
 <script>
+  import { Toast } from 'quasar'
   export default {
     data () {
       return {
@@ -44,6 +45,28 @@
           password: ''
         }
       }
+    },
+    methods: {
+      submit () {
+        let data = {
+          grant_type: 'password',
+          username: this.user.username,
+          password: this.user.password,
+          client_id: '2',
+          client_secret: 'I8Z8O2LISYpH7WTmfeU1r1qcXnqsh5XVll3ZrfzS'
+        }
+        this.$http.post('oauth/token', data)
+          .then(response => {
+            this.$auth.setToken(response.body.access_token, response.body.expires_in + Date.now())
+            this.$router.push('/home')
+          })
+          .catch(() => {
+            Toast.create.negative('Verifique suas credenciais!')
+          })
+      }
+    },
+    components: {
+      Toast
     }
   }
 </script>

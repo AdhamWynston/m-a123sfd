@@ -14,7 +14,7 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
-$router->group(['prefix' => 'v1', 'middleware'=>'cors'], function () use ($router) {
+$router->group(['prefix' => 'v1', 'middleware'=>'auth:api'], function () use ($router) {
     $router->get('users', [
         'as' => 'users', 'uses' => 'UserController@index'
     ]);
