@@ -61,7 +61,7 @@
             this.$router.push('/home')
           })
           .catch(() => {
-            Toast.create.negative('Verifique suas credenciais!')
+            Toast.create.negative('Opaa! Verifique suas credenciais!')
           })
       }
     },
